@@ -3,4 +3,11 @@ sentence-transformers
 faiss-cpu
 fastapi
 uvicorn
-torch
+torch==2.6.0+cu118
+torchvision==0.21.0+cu118
+torchaudio==2.6.0+cu118
+accelerate
+--extra-index-url https://download.pytorch.org/whl/cu118
+PyPDF2
+python-multipart
+bitsandbytes

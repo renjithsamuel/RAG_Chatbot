@@ -2,6 +2,7 @@ import os
 import pickle
 from typing import List
 import faiss
+import PyPDF2
 
 def load_docs(path: str) -> List[str]:
     docs = []
@@ -32,3 +33,21 @@ def save_faiss_index(index, index_dir: str):
 
 def load_faiss_index(index_dir: str):
     return faiss.read_index(os.path.join(index_dir, "faiss_index.bin"))
+
+# PDF Processing
+def load_pdf(path: str) -> List[str]:
+    text = []
+    with open(path, "rb") as f:
+        reader = PyPDF2.PdfReader(f)
+        for page in reader.pages:
+            text.append(page.extract_text())
+    return text  # list of page-texts
+
+def chunk_texts_from_pdf(path: str, chunk_size: int = 500) -> List[str]:
+    pages = load_pdf(path)
+    chunks = []
+    for page in pages:
+        # simple sliding window
+        for i in range(0, len(page), chunk_size):
+            chunks.append(page[i:i + chunk_size])
+    return chunks

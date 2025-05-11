@@ -9,6 +9,7 @@ from app.utils import load_docs, chunk_texts, save_chunks, save_faiss_index
 from sentence_transformers import SentenceTransformer
 import faiss
 import numpy as np
+from app.utils import load_docs, chunk_texts, chunk_texts_from_pdf, save_chunks, save_faiss_index
 
 DOCS_DIR = "data/docs"
 INDEX_DIR = "index"
@@ -17,6 +18,11 @@ CHUNK_SIZE = 500
 def main():
     print("🚀 Loading documents...")
     docs = load_docs(DOCS_DIR)
+    for fname in os.listdir("data/pdf"):
+        if fname.lower().endswith(".pdf"):
+            pdf_chunks = chunk_texts_from_pdf(os.path.join("data/pdf", fname), CHUNK_SIZE)
+            chunks.extend(pdf_chunks)
+
     chunks = chunk_texts(docs, CHUNK_SIZE)
 
     print(f"🔍 Chunked into {len(chunks)} segments. Generating embeddings...")
